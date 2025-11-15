@@ -12,12 +12,13 @@ class GerenciadorCooperados:
        def conectar(self):
          try:
             print(
-               self.config("host"),
-               self.config("user"),
-               self.config("password"),
-               self.config("database"),
+               self.config.get("host"),
+               self.config.get("user"),
+               self.config.get("password"),
+               self.config.get("database"),
                flush=True
             )
+            
             conexao = mysql.connector.connect(self.config)
             if conexao.is_connected():
                 print("Conexão bem-sucedida com o banco de dados.")
