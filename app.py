@@ -46,18 +46,20 @@ def buscar():
     resultado = gg.buscar_cooperados(nome)  # ✅ Agora sim: passa apenas a string "nome"
     print("DADOS RECEBIDOS:", nome, flush=True)
 
-    cooperados = [
-      {
-        "IdPedencias": row["IdPedencias"],
-        "id": row["Matricula"],
-        "nome": row["nome"],
-        "pendencias": row["TipoPendencia"],       
-        "StatusPedencia": row["StatusPendecia"],  
-        "observacao": row["Descricao"],
-        "data_emissao": row["Data"],
-      }
-        for row in resultado
-     ]
+    cooperados = []
+
+    for linha in resultado:
+     print("Montando cooperado com linha:", linha, flush=True)
+     cooperados.append({
+        "IdPedencias": linha.get("IdPedencias"),
+        "id": linha.get("Matricula"),
+        "nome": linha.get("nome"),
+        "pendencias": linha.get("TipoPendencia"),
+        "StatusPedencia": linha.get("StatusPendecia"),
+        "observacao": linha.get("Descricao"),
+        "data_emissao": linha.get("Data"),
+    })
+     
     return jsonify({"cooperados": cooperados}), 200
 
 
