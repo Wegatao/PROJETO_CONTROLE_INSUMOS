@@ -115,20 +115,23 @@ class GerenciadorCooperados:
           #Criado cursor para retornar dicionário. E executado a variável sql com parametro nome.
           cursor = conexao.cursor(dictionary=True)
           cursor.execute("""
-              SELECT 
-              p.Matricula,
-              p.nome,
-              pe.IdPedencias,
-              pe.TipoPendencia,
-              pe.StatusPendecia,
-              pe.Data,
-              pe.Descricao
-              FROM PSS p
-              INNER JOIN Pendencias pe ON p.Matricula = pe.Matricula
-              WHERE LOWER(p.nome) LIKE %s """,("%"+nome+"%"))  
+            SELECT 
+            p.Matricula,
+            p.nome,
+            pe.IdPedencias AS IdPedencias,
+            pe.TipoPendencia,
+            pe.StatusPendecia,
+            pe.Data,
+            pe.Descricao
+            FROM PSS p
+            INNER JOIN Pendencias pe ON p.Matricula = pe.Matricula
+            WHERE LOWER(p.nome) LIKE %s  """, ("%" + nome.lower() + "%",))
           
 
           resultado = cursor.fetchall()
+          print(f"Qtd registros encontrados: {len(resultado)}", flush=True)
+          for row in resultado:
+            print("Linha retornada:", row, flush=True)
       
 
         #Retorna os dados eonctrado na busca.
