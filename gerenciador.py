@@ -19,7 +19,7 @@ class GerenciadorCooperados:
                flush=True
             )
             
-            conexao = mysql.connector.connect(**self.config)
+            conexao = mysql.connector.connect(self.config)
             if conexao.is_connected():
                 print("Conexão bem-sucedida com o banco de dados.")
                 return conexao
@@ -96,7 +96,15 @@ class GerenciadorCooperados:
                                       
        # Busca cooperados pelo nome
        def buscar_cooperados(self, nome):
-        cooperados = []
+        cooperados = [ { 
+                   "none":"none" ,
+                   "none":"none" ,
+                   "none":"none" ,
+                   "none":"none" ,
+                   "none":"none" ,
+                   "none":"none" ,
+                   "none":"none" ,
+         }]
         conexao = self.conectar()
 
         if not conexao:
@@ -169,4 +177,3 @@ class GerenciadorCooperados:
               finally:
                 if conexao.is_connected():
                   conexao.close()
-
