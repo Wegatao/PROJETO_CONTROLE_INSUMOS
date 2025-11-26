@@ -8,12 +8,10 @@ from CadastrarPendencia import CadastrarPendencia
 from CadastrarPessoa import CadastrarPessoa
 from config import CONFING
 import os
-
-# ===== IMPORTS NOVOS PARA AUTENTICAÇÃO =====
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from functools import wraps
-# ==========================================
+
 
 app = Flask(__name__)
 CORS(app)
@@ -143,9 +141,40 @@ def cadastrarPessoa():
 
 @app.route("/cadastrarPendencia", methods=["POST"])
 # @requer_autenticacao
+@app.route("/cadastrarPendencia", methods=["POST"])
 def cadastrarPendencia():
-    dados = request.get_json()
-    resultado = CadastrarPendencia(dados).CadastrarPendenciaMethod()
+    dados = request.get_json() or {}
+
+    # campos vindo do front
+    Matricula  = dados.get("Matricula")
+    Tipo       = dados.get("TipoPendencia") or dados.get("Categoria")
+    Status     = dados.get("StatusPendecia")
+    Data       = dados.get("Data")
+    Descricao  = dados.get("Descricao")
+    Prioridade = dados.get("Prioridade")
+    Categoria  = dados.get("Categoria")
+    RespInt    = dados.get("Responsavel") or dados.get("ResponsavelInterno")
+    Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
+    Nova       = dados.get("Referencia")  # se quiser usar essa coluna pra referência
+
+    if not Matricula or not Tipo or not Status or not Data:
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Matricula, Tipo, Status e Data são obrigatórios."
+        }), 400
+
+    resultado = gg.cadastrar_pendencia(
+        Matricula,
+        Tipo,
+        Status,
+        Data,
+        Descricao,
+        Prioridade=Prioridade,
+        Categoria=Categoria,
+        ResponsavelInterno=RespInt,
+        TituloDaPendencia=Titulo,
+        Nova=Nova
+    )
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
 
 
@@ -164,23 +193,43 @@ def buscar():
         return jsonify({"sucesso": False, "mensagem": "nome não fornecido."}), 400
 
     print(f"Nome recebido para busca: {nome}", flush=True)
-    resultado = gg.buscar_cooperados(nome)
-    print("DADOS RECEBIDOS:", nome, flush=True)
+    resultado = gg.buscar_cooperados(nome)  # já vem como lista de dicts
+    print("Resultado bruto do gerenciador:", resultado, flush=True)
 
     cooperados = []
     for linha in resultado:
-        print("Montando cooperado com linha:", linha, flush=True)
+        # garante string simples de data (ex.: "2025-01-20")
+        data_val = linha.get("Data")
+        data_str = str(data_val) if data_val is not None else ""
+
+        # monta no formato que o front espera
         cooperados.append({
             "IdPedencias": linha.get("IdPedencias"),
-            "id": linha.get("Matricula"),
-            "nome": linha.get("nome"),
-            "pendencias": linha.get("TipoPendencia"),
-            "StatusPedencia": linha.get("StatusPedecia") if "StatusPedecia" in linha else linha.get("StatusPendecia"),
-            "observacao": linha.get("Descricao"),
-            "data_emissao": linha.get("Data"),
+            "id":          linha.get("Matricula"),
+            "nome":        linha.get("nome"),
+
+            # Tipo = prioridade (Alta, Média, Baixa) – usado nas cores da tabela
+            "Tipo": linha.get("Prioridade"),
+
+            # chave com o nome exato que o JS usa: StatusPedencia
+            "StatusPedencia": (
+                linha.get("StatusPedencia")
+                or linha.get("StatusPendencia")
+                or linha.get("StatusPedecia")
+            ),
+
+            "observacao":   linha.get("Descricao"),
+            "data_emissao": data_str,
+
+            # extras (se quiser usar depois)
+            "TipoPendencia":      linha.get("TipoPendencia"),
+            "Categoria":          linha.get("Categoria"),
+            "ResponsavelInterno": linha.get("ResponsavelInterno"),
+            "Titulo":             linha.get("TituloDaPendencia"),
         })
 
     return jsonify({"cooperados": cooperados}), 200
+
 
 
 @app.route("/atualizar", methods=["PUT"])
