@@ -48,13 +48,17 @@ class GerenciadorCooperados:
             cursor = conexao.cursor()
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS Pendencias (
-                    IdPedencias INT AUTO_INCREMENT PRIMARY KEY,
-                    Matricula VARCHAR(20),
-                    TipoPendencia VARCHAR(100),
-                    StatusPendecia VARCHAR(20),
-                    Data DATE,
-                    Descricao VARCHAR(100),
-                    FOREIGN KEY(Matricula) REFERENCES PSS(Matricula)
+                IdPedencias INT AUTO_INCREMENT PRIMARY KEY,
+                Matricula VARCHAR(20),
+                TituloDaPendencia VARCHAR(255),
+                Categoria VARCHAR(100),
+                TipoPendencia VARCHAR(100),
+                StatusPendencia VARCHAR(50),
+                Prioridade VARCHAR(50),
+                ResponsavelInterno VARCHAR(100),
+                Data TEXT,
+                Descricao VARCHAR(255),
+                FOREIGN KEY(Matricula) REFERENCES PSS(Matricula)
                 )
             """)
             conexao.commit()
@@ -72,17 +76,48 @@ class GerenciadorCooperados:
             conexao.commit()
             conexao.close()
 
-    def cadastrar_pendencia(self, Matricula, TipoPendencia, StatusPendecia, Data, Descricao):
+    def cadastrar_pendencia(self, Matricula, TipoPendencia, Status, Data, Descricao,Prioridade,Categoria, ResponsavelInterno,TituloDaPendencia):
         conexao = self.conectar()
         # Inverte a data para o formato YYYY-MM-DD
         Data = self.inverterData(Data)
+        
+        conexao = self.conectar()
+        if not conexao:
+         return {"sucesso": False, "mensagem": "Falha ao conectar no banco."}
+        if Data:
+         try:
+            Data = self.inverterData(Data)
+         except Exception:
+            # se vier em outro formato, deixa como está
+            pass
+        
         if conexao:
             try:
                 cursor = conexao.cursor()
                 cursor.execute("""
-                    INSERT INTO Pendencias (Matricula, TipoPendencia, StatusPendecia, Data, Descricao)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (Matricula, TipoPendencia, StatusPendecia, Data, Descricao))
+                   INSERT INTO Pendencias (
+                Matricula,
+                TipoPendencia,
+                StatusPendencia,
+                Data,
+                Descricao,
+                Prioridade,
+                Categoria,
+                ResponsavelInterno,
+                TituloDaPendencia,
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            Matricula,
+            TipoPendencia,
+            Status,
+            Data,
+            Descricao,
+            Prioridade,
+            Categoria,
+            ResponsavelInterno,
+            TituloDaPendencia,
+        ))
                 conexao.commit()
                 return {"sucesso": True, "mensagem": "Pendência cadastrada com sucesso"}
             except Error as e:
@@ -90,6 +125,7 @@ class GerenciadorCooperados:
                 return {"sucesso": False, "mensagem": f"Erro: {e}"}
             finally:
                 conexao.close()
+
 
     def inverterData(self, i):
         data_obj = datetime.strptime(i, "%d/%m/%Y")  # Converte string em data
@@ -159,26 +195,28 @@ class GerenciadorCooperados:
         return cooperados
 
     # Atualiza dados de um cooperado
-    def atualizar_pendencia(self, IdPendencia, PessoaAutorizada, AssinaturaCooperado):
-        conexao = self.conectar()
-        if conexao:
-            try:
-                cursor = conexao.cursor()
-                cursor.execute("""
-                    UPDATE Pendencias 
-                    SET StatusPendecia = %s, TipoPendencia = %s
-                    WHERE IdPedencias = %s
-                """, (PessoaAutorizada, AssinaturaCooperado, IdPendencia))
+    def atualizar_pendencia(self, IdPendencia, novoStatus, novaPrioridade):
+     conexao = self.conectar()
+     if conexao:
+        try:
+            cursor = conexao.cursor()
+            cursor.execute("""
+                UPDATE Pendencias 
+                SET StatusPendencia = %s,
+                    Prioridade      = %s
+                WHERE IdPedencias = %s
+            """, (novoStatus, novaPrioridade, IdPendencia))
 
-                conexao.commit()
-                print("Pendência atualizada com sucesso!")
+            conexao.commit()
+            print("Pendência atualizada com sucesso!")
 
-            except Error as e:
-                print(f"Erro ao atualizar pendência: {e}")
+        except Error as e:
+            print(f"Erro ao atualizar pendência: {e}")
 
-            finally:
-                if conexao.is_connected():
-                    conexao.close()
+        finally:
+            if conexao.is_connected():
+                conexao.close()
+
 
     # ============================
     # ====== AUTENTICAÇÃO ========
