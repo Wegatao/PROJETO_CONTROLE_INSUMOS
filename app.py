@@ -139,7 +139,7 @@ def cadastrarPessoa():
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
 
 
-@app.route("/cadastrarPendencia", methods=["POST"])
+#@app.route("/cadastrarPendencia", methods=["POST"])
 # @requer_autenticacao
 @app.route("/cadastrarPendencia", methods=["POST"])
 def cadastrarPendencia():
@@ -148,17 +148,17 @@ def cadastrarPendencia():
     # campos vindo do front
     Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
 
-    Matricula  = dados.get("Matricula")
-    RespInt    = dados.get("Responsavel") or dados.get("ResponsavelInterno")
-    Tipo       = dados.get("TipoPendencia") or dados.get("Categoria")
+    Matricula  = dados.get("CooperadoMatricula")
+    RespInt    = dados.get("Responsavel") or dados.get("Responsável_interno")
+    Categoria       = dados.get("Categoria") # mapeia "categoria" como tipo
     Prioridade = dados.get("Prioridade")
-    Status     = dados.get("StatusPendecia")
+    Status     = dados.get("Status_inicial") 
     Data       = dados.get("Data")
     
     Descricao  = dados.get("Descricao")   
     Referencia       = dados.get("Referencia")  # se quiser usar essa coluna pra referência
 
-    if not Matricula or not Tipo or not Status or not Data:
+    if not Matricula or not Categoria or not Status or not Data:
         return jsonify({
             "sucesso": False,
             "mensagem": "Matricula, Tipo, Status e Data são obrigatórios."
@@ -166,7 +166,7 @@ def cadastrarPendencia():
 
     resultado = gg.cadastrar_pendencia(
         Matricula,
-        Tipo,
+        Categoria,
         Status,
         Data,
         Descricao,
