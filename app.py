@@ -146,16 +146,17 @@ def cadastrarPendencia():
     dados = request.get_json() or {}
 
     # campos vindo do front
+    Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
+
     Matricula  = dados.get("Matricula")
+    RespInt    = dados.get("Responsavel") or dados.get("ResponsavelInterno")
     Tipo       = dados.get("TipoPendencia") or dados.get("Categoria")
+    Prioridade = dados.get("Prioridade")
     Status     = dados.get("StatusPendecia")
     Data       = dados.get("Data")
-    Descricao  = dados.get("Descricao")
-    Prioridade = dados.get("Prioridade")
-    Categoria  = dados.get("Categoria")
-    RespInt    = dados.get("Responsavel") or dados.get("ResponsavelInterno")
-    Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
-    Nova       = dados.get("Referencia")  # se quiser usar essa coluna pra referência
+    
+    Descricao  = dados.get("Descricao")   
+    Referencia       = dados.get("Referencia")  # se quiser usar essa coluna pra referência
 
     if not Matricula or not Tipo or not Status or not Data:
         return jsonify({
@@ -170,10 +171,9 @@ def cadastrarPendencia():
         Data,
         Descricao,
         Prioridade=Prioridade,
-        Categoria=Categoria,
         ResponsavelInterno=RespInt,
         TituloDaPendencia=Titulo,
-        Nova=Nova
+        Referencia=Referencia
     )
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
 
