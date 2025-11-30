@@ -170,7 +170,7 @@ def cadastrarPendencia():
         Status,
         Data,
         Descricao,
-        Prioridade=Prioridade,
+        Prioridade,
         ResponsavelInterno=RespInt,
         TituloDaPendencia=Titulo,
         Referencia=Referencia
