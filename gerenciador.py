@@ -76,7 +76,18 @@ class GerenciadorCooperados:
             conexao.commit()
             conexao.close()
 
-    def cadastrar_pendencia(self, Matricula, TipoPendencia, Status, Data, Descricao,Prioridade,Categoria, ResponsavelInterno,TituloDaPendencia):
+    def cadastrar_pendencia(self, 
+                            TituloDaPendencia,
+                            Matricula, 
+                            Tipo,
+                            Status, 
+                            Data,
+                            Descricao,
+                            Prioridade,
+                            ResponsavelInterno, 
+                            Referencia, 
+                           
+                            ):
         conexao = self.conectar()
         # Inverte a data para o formato YYYY-MM-DD
         Data = self.inverterData(Data)
@@ -96,27 +107,29 @@ class GerenciadorCooperados:
                 cursor = conexao.cursor()
                 cursor.execute("""
                    INSERT INTO Pendencias (
+                TituloDaPendencia,
                 Matricula,
                 TipoPendencia,
                 StatusPendencia,
                 Data,
                 Descricao,
                 Prioridade,
-                Categoria,
                 ResponsavelInterno,
-                TituloDaPendencia,
+                Categoria,
+
+
             )
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
-            Matricula,
-            TipoPendencia,
-            Status,
-            Data,
-            Descricao,
-            Prioridade,
-            Categoria,
-            ResponsavelInterno,
-            TituloDaPendencia,
+                TituloDaPendencia,
+                Matricula, 
+                Tipo,
+                Status, 
+                Data,
+                Descricao,
+                Prioridade,
+                ResponsavelInterno, 
+                Referencia, 
         ))
                 conexao.commit()
                 return {"sucesso": True, "mensagem": "Pendência cadastrada com sucesso"}
