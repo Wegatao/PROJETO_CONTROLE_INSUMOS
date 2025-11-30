@@ -171,7 +171,7 @@ def cadastrarPendencia():
         Data,
         Descricao,
         Prioridade,
-        ResponsavelInterno=RespInt,
+        RespInt,
         TituloDaPendencia=Titulo,
         Referencia=Referencia
     )
