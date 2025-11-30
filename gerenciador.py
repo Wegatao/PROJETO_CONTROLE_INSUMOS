@@ -77,15 +77,15 @@ class GerenciadorCooperados:
             conexao.close()
 
     def cadastrar_pendencia(self, 
-                            TituloDaPendencia,
-                            Matricula, 
-                            Tipo,
-                            Status, 
-                            Data,
-                            Descricao,
+                            Titulo, 
+                            Matricula,
+                            Categoria,
                             Prioridade,
-                            ResponsavelInterno, 
-                            Referencia, 
+                            Status,
+                            Data,
+                            Descricao  = None, 
+                            Referencia  = None,
+                            RespInt = None, 
                            
                             ):
         conexao = self.conectar()
@@ -105,31 +105,28 @@ class GerenciadorCooperados:
         if conexao:
             try:
                 cursor = conexao.cursor()
-                cursor.execute("""
-                   INSERT INTO Pendencias (
-                TituloDaPendencia,
-                Matricula,
-                TipoPendencia,
-                StatusPendencia,
-                Data,
-                Descricao,
-                Prioridade,
-                ResponsavelInterno,
-                Categoria,
-
-
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (
-                TituloDaPendencia,
-                Matricula, 
-                Tipo,
-                Status, 
-                Data,
-                Descricao,
-                Prioridade,
-                ResponsavelInterno, 
-                Referencia, 
+                cursor.execute( """
+                INSERT INTO Pendencias (
+                    Matricula,
+                    TipoPendencia,
+                    StatusPendecia,
+                    Data,
+                    Descricao,
+                    TituloDaPendencia,
+                    Responsavel,
+                    Prioridade,
+                    Referencia
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (
+                    Matricula,
+                    Categoria,
+                    Status,
+                    Data,
+                    Descricao,
+                    Titulo,
+                    RespInt,
+                    Prioridade,
+                    Referencia,
         ))
                 conexao.commit()
                 return {"sucesso": True, "mensagem": "Pendência cadastrada com sucesso"}
