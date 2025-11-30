@@ -119,11 +119,11 @@ class GerenciadorCooperados:
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     Matricula,
-                    Categoria,
+                    Titulo,
                     Status,
                     Data,
                     Descricao,
-                    Titulo,
+                    Categoria,
                     RespInt,
                     Prioridade,
                     Referencia,
