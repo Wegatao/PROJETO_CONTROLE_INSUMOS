@@ -172,8 +172,8 @@ def cadastrarPendencia():
         Descricao,
         Prioridade,
         RespInt,
-        TituloDaPendencia=Titulo,
-        Referencia=Referencia
+        Titulo,
+        Referencia
     )
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
 
