@@ -89,10 +89,10 @@ class GerenciadorCooperados:
                            
                             ):
         conexao = self.conectar()
+
         # Inverte a data para o formato YYYY-MM-DD
         Data = self.inverterData(Data)
         
-        conexao = self.conectar()
         if not conexao:
          return {"sucesso": False, "mensagem": "Falha ao conectar no banco."}
         if Data:
@@ -138,8 +138,27 @@ class GerenciadorCooperados:
 
 
     def inverterData(self, i):
+        if not data_str:
+            return None
 
-        return i 
+        data_str = data_str.strip()
+
+        # Se já estiver no formato yyyy-mm-dd, mantenha
+        try:
+            # tenta interpretar como yyyy-mm-dd
+            dt = datetime.strptime(data_str, "%Y-%m-%d")
+            return dt.strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+        # tenta interpretar como dd/mm/yyyy
+        try:
+            dt = datetime.strptime(data_str, "%d/%m/%Y")
+            return dt.strftime("%Y-%m-%d")
+        except ValueError:
+            print(f"[inverterData] Formato de data inesperado: {data_str!r}")
+            return data_str  # ou None, se você quiser obrigar formato
+            
 
     # Busca cooperados pelo nome
     def buscar_cooperados(self, nome):
