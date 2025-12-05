@@ -138,9 +138,8 @@ class GerenciadorCooperados:
 
 
     def inverterData(self, i):
-        data_obj = datetime.strptime(i, "%d/%m/%Y")  # Converte string em data
-        data_convertida = data_obj.strftime("%Y-%m-%d")  # Converte data em string no formato certo
-        return data_convertida
+
+        return i 
 
     # Busca cooperados pelo nome
     def buscar_cooperados(self, nome):
