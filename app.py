@@ -22,7 +22,7 @@ serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 gg = GerenciadorCooperados(CONFING)
 # opcional: garantir tabela de usuários existe
-# gg.criar_tabela_usuarios()
+#gg.criar_tabela_usuarios()
 
 
 # --- HELPERS DE AUTENTICAÇÃO (TOKEN SIMPLES) ---
@@ -139,12 +139,11 @@ def cadastrarPessoa():
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
 
 
-#@app.route("/cadastrarPendencia", methods=["POST"])
 # @requer_autenticacao
 @app.route("/cadastrarPendencia", methods=["POST"])
 def cadastrarPendencia():
     dados = request.get_json() or {}
-
+    print("Dados recebidos:", dados , flush=True)
     # campos vindo do front
     Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
 
@@ -176,7 +175,6 @@ def cadastrarPendencia():
         Referencia
     )
     return jsonify(resultado), 200 if resultado.get("sucesso") else 400
-
 
 @app.route("/buscar", methods=["POST"])
 # @requer_autenticacao
