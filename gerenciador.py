@@ -109,12 +109,12 @@ class GerenciadorCooperados:
                 cursor.execute( """
                 INSERT INTO Pendencias (
                     Matricula,
-                    TipoPendencia,
+                    TítuloDaPendência,
                     StatusPendecia,
                     Data,
                     Descricao,
                     Categoria,
-                    Responsavel,
+                    ResponsavelInterno,
                     Prioridade,
                     Referencia
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
