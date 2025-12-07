@@ -112,7 +112,7 @@ class GerenciadorCooperados:
                     StatusPendecia,
                     Data,
                     Descricao,
-                    TituloDaPendencia,
+                    Categoria,
                     Responsavel,
                     Prioridade,
                     Referencia
