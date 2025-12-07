@@ -77,16 +77,16 @@ class GerenciadorCooperados:
             conexao.close()
 
     def cadastrar_pendencia(self, 
-                            Titulo, 
-                            Matricula,
+                            Matricula, 
                             Categoria,
-                            Prioridade,
                             Status,
                             Data,
-                            Descricao  = None, 
-                            Referencia  = None,
-                            RespInt = None, 
-                           
+                            Descricao,
+                            Prioridade,
+                            RespInt = None,
+                            Titulo  = None, 
+                            Referencia  = None, 
+
                             ):
         conexao = self.conectar()
 
@@ -95,6 +95,7 @@ class GerenciadorCooperados:
         
         if not conexao:
          return {"sucesso": False, "mensagem": "Falha ao conectar no banco."}
+        
         if Data:
          try:
             Data = self.inverterData(Data)
