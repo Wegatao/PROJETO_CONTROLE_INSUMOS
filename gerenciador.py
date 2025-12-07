@@ -137,27 +137,35 @@ class GerenciadorCooperados:
                 conexao.close()
 
 
-    def inverterData(self, i):
+    def inverterData(self, data_str: str | None) -> str | None:
+        """
+        Converte a data para formato YYYY-MM-DD.
+
+        Aceita:
+        - "dd/mm/aaaa"
+        - "yyyy-mm-dd" (já no formato certo)
+        Se vier em outro formato, devolve como veio e loga.
+        """
         if not data_str:
             return None
 
-        data_str = data_str.strip()
+        # garante que é string
+        data_str = str(data_str).strip()
 
-        # Se já estiver no formato yyyy-mm-dd, mantenha
+        # tenta yyyy-mm-dd
         try:
-            # tenta interpretar como yyyy-mm-dd
             dt = datetime.strptime(data_str, "%Y-%m-%d")
             return dt.strftime("%Y-%m-%d")
         except ValueError:
             pass
 
-        # tenta interpretar como dd/mm/yyyy
+        # tenta dd/mm/yyyy
         try:
             dt = datetime.strptime(data_str, "%d/%m/%Y")
             return dt.strftime("%Y-%m-%d")
         except ValueError:
             print(f"[inverterData] Formato de data inesperado: {data_str!r}")
-            return data_str  # ou None, se você quiser obrigar formato
+            return data_str  # ou None se você quiser obrigar formato
             
 
     # Busca cooperados pelo nome
