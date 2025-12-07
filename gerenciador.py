@@ -83,9 +83,9 @@ class GerenciadorCooperados:
                             Data,
                             Descricao,
                             Prioridade,
-                            RespInt = None,
-                            Titulo  = None, 
-                            Referencia  = None, 
+                            RespInt,
+                            Titulo , 
+                            Referencia, 
 
                             ):
         conexao = self.conectar()
