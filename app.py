@@ -145,7 +145,7 @@ def cadastrarPendencia():
     dados = request.get_json() or {}
     print("Dados recebidos:", dados , flush=True)
     # campos vindo do front
-    Titulo     = dados.get("Titulo") or dados.get("TituloDaPendencia")
+    Titulo     =  dados.get("TítuloDaPendência")
 
     Matricula  = dados.get("CooperadoMatricula")
     RespInt    = dados.get("Responsavel") or dados.get("Responsável_interno")
