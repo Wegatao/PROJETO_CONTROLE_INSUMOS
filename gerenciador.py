@@ -65,13 +65,13 @@ class GerenciadorCooperados:
             conexao.close()
 
     # Cadastra um novo cooperado no banco de dados
-    def cadastrar_PSS(self, Matricula, nome):
+    def cadastrar_PSS(self, Matricula, nome,email,whatsapp,dataEntrada,tipoCooperado,situacao):
         conexao = self.conectar()
         if conexao:
             cursor = conexao.cursor()
             cursor.execute(
-                "INSERT INTO PSS (Matricula, nome) VALUES (%s, %s)",
-                (Matricula, nome)
+                "INSERT INTO PSS (Matricula, Nome, Email, DataEntrada, TipoDeCooperado, Situacao, WhatsApp) VALUES (%s, %s,%s, %s, %s, %s, %s)",
+                (Matricula, nome, email, dataEntrada, tipoCooperado, situacao, whatsapp)
             )
             conexao.commit()
             conexao.close()
